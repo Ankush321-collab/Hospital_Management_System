@@ -1,84 +1,80 @@
-import mongoose from 'mongoose';
-import validator from 'validator';
+import mongoose from "mongoose";
+import validator from "validator";
+import bcrypt from "bcrypt";
+import jwt from "jsonwebtoken";
 
-const UserSchema = new mongoose.Schema({
-  firstname: {
+const userSchema = new mongoose.Schema({
+  firstName: {
     type: String,
-    required: [true, "First name is required"],
-    minlength: [3, "First name must be at least 3 characters"]
+    required: [true, "First Name Is Required!"],
+    minLength: [3, "First Name Must Contain At Least 3 Characters!"],
   },
-
-  lastname: {
+  lastName: {
     type: String,
-    required: [true, "Last name is required"],
-    minlength: [3, "Last name must be at least 3 characters"]
+    required: [true, "Last Name Is Required!"],
+    minLength: [3, "Last Name Must Contain At Least 3 Characters!"],
   },
-
   email: {
     type: String,
-    required: [true, "Email is required"],
-    unique: true,
-    lowercase: true,
-    validate: [validator.isEmail, "Please provide a valid email"]
+    required: [true, "Email Is Required!"],
+    validate: [validator.isEmail, "Provide A Valid Email!"],
   },
-
-  password: {
-    type: String,
-    required: [true, "Password is required"],
-    minlength: [6, "Password must be at least 6 characters"],
-    select: false // Important: Password won't be returned in queries
-  },
-
   phone: {
     type: String,
-    required: [true, "Phone number is required"],
-    minlength: [10, "Phone number must be 10 digits"],
-    maxlength: [10, "Phone number must be 10 digits"]
+    required: [true, "Phone Is Required!"],
+    minLength: [10, "Phone Number Must Contain Exact 11 Digits!"],
+    maxLength: [11, "Phone Number Must Contain Exact 11 Digits!"],
   },
-
   aadhar: {
     type: String,
-    required: [true, "Aadhar number is required"],
-    minlength: [12, "Aadhar must be 12 digits"],
-    maxlength: [12, "Aadhar must be 12 digits"]
+    required: [true, "Aadhar Is Required!"],
+    minLength: [13, "Aadhar Must Contain Only 13 Digits!"],
+    maxLength: [13, "Aadhar Must Contain Only 13 Digits!"],
   },
-
-  
-dob:{
-        type:String,
-        required:[true,"Dob is required"]
-
-    },
-
-    gender:{
-        type:String,
-        required:true,
-        enum:["male","female"]
-    },
-
-    role:{
-        type:String,
-        required:true,
-        enum:["admin","patient","doctor"]
-
-    },
-   doctordepartment: {
-    type:String
-
-    },
-    docavatar:{
-        public_id:String,
-        url:String
-        
-    },
-  
-
-  
-
-  
-}, {
-  timestamps: true
+  dob: {
+    type: Date,
+    required: [true, "DOB Is Required!"],
+  },
+  gender: {
+    type: String,
+    required: [true, "Gender Is Required!"],
+    enum: ["Male", "Female"],
+  },
+  password: {
+    type: String,
+    required: [true, "Password Is Required!"],
+    minLength: [8, "Password Must Contain At Least 8 Characters!"],
+    select: false,
+  },
+  role: {
+    type: String,
+    required: [true, "User Role Required!"],
+    enum: ["Patient", "Doctor", "Admin"],
+  },
+  doctorDepartment:{
+    type: String,
+  },
+  docAvatar: {
+    public_id: String,
+    url: String,
+  },
 });
 
-const User = mongoose.model("User", UserSchema);
-export default User;
+userSchema.pre("save", async function (next) {
+  if (!this.isModified("password")) {
+    next();
+  }
+  this.password = await bcrypt.hash(this.password, 10);
+});
+
+userSchema.methods.comparePassword = async function (enteredPassword) {
+  return await bcrypt.compare(enteredPassword, this.password);
+};
+
+userSchema.methods.generateJsonWebToken = function () {
+  return jwt.sign({ id: this._id }, process.env.JWT_SECRET_KEY, {
+    expiresIn: process.env.JWT_EXPIRES,
+  });
+};
+
+export const User = mongoose.model("User", userSchema);

@@ -1,36 +1,42 @@
-class ErrorHandler extends Error{
-    constructor(message,statuscode){
-        super(message);
-        this.statuscode=statuscode
+class ErrorHandler extends Error {
+    constructor(message, statusCode) {
+      super(message);
+      this.statusCode = statusCode;
     }
-}
-
-//error middleware
-export const errormiddleware = (err, req, res, next) => {
+  }
+  
+  export const errorMiddleware = (err, req, res, next) => {
     err.message = err.message || "Internal Server Error";
-    err.statuscode = err.statuscode || 500;
-
-    // Handle MongoDB duplicate key error (code 11000)
+    err.statusCode = err.statusCode || 500;
+  
     if (err.code === 11000) {
-        const message = `Duplicate ${Object.keys(err.keyValue)} entered`;
+      const message = `Duplicate ${Object.keys(err.keyValue)} Entered`,
         err = new ErrorHandler(message, 400);
     }
-    if(err.name==="JsonWebTokenError"){
-        const message="json web token is invalid try again"
-        err=new ErrorHandler(message,400)
+    if (err.name === "JsonWebTokenError") {
+      const message = `Json Web Token is invalid, Try again!`;
+      err = new ErrorHandler(message, 400);
     }
-
-    if(err.name==="TokenExpiredError"){
-        const message="json web token is Expired try again"
-        err=new ErrorHandler(message,400)
+    if (err.name === "TokenExpiredError") {
+      const message = `Json Web Token is expired, Try again!`;
+      err = new ErrorHandler(message, 400);
     }
-    const errormessage=err.errors?Object.values(err.errors).map((error)=>{
-        return error.message
-    }).join(" && "):err.message
-
-    res.status(err.statuscode).json({
-        success: false,
-        message: errormessage,
+    if (err.name === "CastError") {
+      const message = `Invalid ${err.path}`,
+        err = new ErrorHandler(message, 400);
+    }
+  
+    const errorMessage = err.errors
+      ? Object.values(err.errors)
+          .map((error) => error.message)
+          .join(" ")
+      : err.message;
+  
+    return res.status(err.statusCode).json({
+      success: false,
+      // message: err.message,
+      message: errorMessage,
     });
-};
-
+  };
+  
+  export default ErrorHandler;

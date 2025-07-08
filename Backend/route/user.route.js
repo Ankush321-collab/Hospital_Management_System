@@ -1,10 +1,31 @@
-import {Signup,login} from '../controller/User.controller.js'
-import express, { application, Router } from 'express'
+import express from "express";
+import {
+  addNewAdmin,
+  addNewDoctor,
+  getAllDoctors,
+  getUserDetails,
+  login,
+  logoutAdmin,
+  logoutPatient,
 
-const router=express.Router();
+  signup,
+} from "../controller/User.controller.js";
+import {
+  isAdminAuthenticated,
+  isPatientAuthenticated,
+} from "../middleware/auth.js";
 
-router.post('/signup',Signup);
-router.post('/login',login);
+const router = express.Router();
 
+router.post("/signup", signup);
+router.post("/login", login);
+router.post("/addadmin", isAdminAuthenticated, addNewAdmin);
+router.post("/adddoctor", addNewDoctor);
+router.get("/alldoctors", getAllDoctors);
+router.get("/patient/me", isPatientAuthenticated, getUserDetails);
+router.get("/admin/me", isAdminAuthenticated, getUserDetails);
+router.get("/doctor/me", isPatientAuthenticated, getUserDetails);
+router.post("/patient/logout", isPatientAuthenticated, logoutPatient);
+router.post("/admin/logout", isAdminAuthenticated, logoutAdmin);
 
 export default router;
