@@ -11,11 +11,13 @@ import appointrouter from './route/appointment.route.js'
 
 const app = express();
 config({ path: "./config.env" });
+console.log("CORS Origin:", process.env.FRONTEND_URL);
 
+// CORS middleware should be at the very top
 app.use(
   cors({
-    origin: [process.env.FRONTEND_URL_ONE, process.env.FRONTEND_URL_TWO],
-    method: ["GET", "POST", "DELETE", "PUT"],
+    origin:"http://localhost:5173",
+    methods: ["GET", "POST", "DELETE", "PUT"],
     credentials: true,
   })
 );
