@@ -25,3 +25,11 @@ export const sendmessage=catchasyncerror(async(req,res)=>{
         message:"message send succesfully"
     })
 });
+
+export const getallmessage=catchasyncerror(async(req,res,next)=>{
+  const message=await Message.find();
+  res.status(200).json({
+    success:true,
+    message
+  })
+});

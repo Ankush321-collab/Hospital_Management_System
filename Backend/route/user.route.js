@@ -20,7 +20,7 @@ const router = express.Router();
 router.post("/signup", signup);
 router.post("/login", login);
 router.post("/addadmin", isAdminAuthenticated, addNewAdmin);
-router.post("/adddoctor", addNewDoctor);
+router.post("/adddoctor",isAdminAuthenticated, addNewDoctor);
 router.get("/alldoctors", getAllDoctors);
 router.get("/patient/me", isPatientAuthenticated, getUserDetails);
 router.get("/admin/me", isAdminAuthenticated, getUserDetails);

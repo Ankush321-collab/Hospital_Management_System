@@ -4,6 +4,13 @@ import ErrorHandler from "../middleware/error.js";
 import { generateToken } from "../../Backend/utils/jwtToken.js";
 import cloudinary from "cloudinary";
 
+// Cloudinary configuration using environment variables
+cloudinary.v2.config({
+  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+  api_key: process.env.CLOUDINARY_API_KEY,
+  api_secret: process.env.CLOUDINARY_API_SECRET,
+});
+
 export const signup = catchAsyncErrors(async (req, res, next) => {
   const { firstName, lastName, email, phone, aadhar, dob, gender, password } =
     req.body;
@@ -133,8 +140,8 @@ export const addNewDoctor = catchAsyncErrors(async (req, res, next) => {
     !dob ||
     !gender ||
     !password ||
-    !doctorDepartment ||
-    !docAvatar
+    !doctorDepartment 
+   
   ) {
     return next(new ErrorHandler("Please Fill Full Form!", 400));
   }
@@ -169,7 +176,7 @@ export const addNewDoctor = catchAsyncErrors(async (req, res, next) => {
     doctorDepartment,
     docAvatar: {
       public_id: cloudinaryResponse.public_id,
-      url: cloudinaryResponse.secure_url,
+      url: cloudinaryResponse.url,
     },
   });
   res.status(200).json({

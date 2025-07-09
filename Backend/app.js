@@ -7,6 +7,7 @@ import fileUpload from "express-fileupload";
 import { errorMiddleware } from "./middleware/error.js";
 import messageRouter from "./route/message.route.js";
 import userRouter from "./route/user.route.js";
+import appointrouter from './route/appointment.route.js'
 
 const app = express();
 config({ path: "./config.env" });
@@ -29,8 +30,15 @@ app.use(
     tempFileDir: "/tmp/",
   })
 );
+
+//router for message
 app.use("/api/v1/message", messageRouter);
+
+//router for users
 app.use("/api", userRouter);
+
+//router for appointment_date
+app.use('/api',appointrouter)
 
 dbConnection();
 
