@@ -3,7 +3,6 @@ import { Eye, EyeOff } from 'lucide-react';
 import { Link, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import axios from 'axios';
-import  './Signup.css'
 
 const Signup = () => {
   const [showpass, setshowpass] = useState(false);
@@ -67,7 +66,7 @@ const Signup = () => {
 
   return (
     <div className='max-w-screen-2xl  w-full h-full m  flex items-center justify-center px-4 py-8 bg-gradient-to-br from-black via-gray-900 to-black'>
-      <div className='  bg-gradient-to-b from-[#1e1e1e] to-[#121212] text-white w-full max-w-md rounded-3xl p-6 sm:p-8 shadow-2xl border border-gray-800'>
+      <div className='  bg-gradient-to-b from-[#1e1e1e] to-[#121212] text-white w-full max-w-md rounded-3xl p-6 sm:p-8 shadow-2xl border border-gray-600'>
         <h1 className='text-2xl sm:text-3xl font-bold text-center mb-6 bg-gradient-to-r from-[#7a6ff0] to-[#5e8bff] bg-clip-text text-transparent'>
           Create your account
         </h1>
