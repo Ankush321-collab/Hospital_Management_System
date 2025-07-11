@@ -1,6 +1,7 @@
 import React from 'react'
 
-export const Hero = ({title, img}) => {
+export const Hero = ({title, img, imageUrl}) => {
+  const imageSrc = img || imageUrl;
   return (
     <div className='flex flex-col md:flex-row items-center justify-between gap-8 max-w-7xl mx-auto px-4 py-16'>
       {/* Custom keyframes for up-down movement */}
@@ -29,7 +30,7 @@ export const Hero = ({title, img}) => {
       <div className="w-full md:w-[650px] md:h-[350px]  flex justify-center items-center  ">
         <div className="  rounded-3xl  shadow-2xl bg-white group flex justify-center items-center mt-8 p-5 border-none" style={{width: '520px', height: '520px'}}>
           <img 
-            src={img} 
+            src={imageSrc} 
             alt="hero" 
             className="w-5/6 h-full  relative animate-move-updown group-hover:scale-105  transition-transform duration-500 ease-in-out mt-8 py-5"
             style={{width: '520px', height: '520px'}}
@@ -42,3 +43,5 @@ export const Hero = ({title, img}) => {
     </div>
   )
 }
+
+export default Hero;

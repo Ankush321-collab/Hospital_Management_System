@@ -10,13 +10,13 @@ import userRouter from "./route/user.route.js";
 import appointrouter from './route/appointment.route.js'
 
 const app = express();
-config({ path: "./config.env" });
-
+config({ path: "./.env" }); // Updated to match .env file
 
 // CORS middleware should be at the very top
+console.log('Allowed CORS origins:', process.env.FRONTED_URL, process.env.DASHBOARD_URL);
 app.use(
   cors({
-    origin:process.env.FRONTED_URL,
+    origin: [process.env.FRONTED_URL, process.env.DASHBOARD_URL],
     methods: ["GET", "POST", "DELETE", "PUT"],
     credentials: true,
   })
@@ -40,7 +40,7 @@ app.use("/api/v1/message", messageRouter);
 app.use("/api", userRouter);
 
 //router for appointment_date
-app.use('/api',appointrouter)
+app.use('/api', appointrouter)
 
 dbConnection();
 
