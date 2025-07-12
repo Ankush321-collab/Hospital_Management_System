@@ -2,6 +2,7 @@ import { Appointment } from '../model/appointmentSchema.js'
 import { catchasyncerror } from "../middleware/catchasyncerror.js";
 import ErrorHandler from "../middleware/error.js";
 import { User } from "../model/UserSchema.js";
+import { Activity } from '../model/activity.schema.js';
 
 
 export const postappointment=catchasyncerror(async(req,res,next)=>{
@@ -61,6 +62,12 @@ export const postappointment=catchasyncerror(async(req,res,next)=>{
       address,
       doctorId: doctor._id,
       patientId,
+    });
+    // Log activity
+    await Activity.create({
+      type: 'appointment_scheduled',
+      description: `Appointment scheduled: ${department} - Patient #${appointment._id}`,
+      meta: { appointmentId: appointment._id, department, doctorId: doctor._id, patientId }
     });
     res.status(200).json({
       success: true,

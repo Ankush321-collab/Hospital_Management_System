@@ -81,15 +81,15 @@ const AddNewAdmin = () => {
     return (
         <>
             <form onSubmit={handlesignup}>
-                <div className='max-w-screen-2xl  w-full h-full m  flex items-center justify-center px-4 py-8 bg-gradient-to-br from-black via-gray-900 to-black'>
-                    <div className='  bg-gradient-to-b from-[#1e1e1e] to-[#121212] text-white w-full max-w-md rounded-3xl p-6 sm:p-8 shadow-2xl border border-gray-600'>
-                        <h1 className='text-2xl sm:text-3xl font-bold text-center mb-6 bg-gradient-to-r from-[#7a6ff0] to-[#5e8bff] bg-clip-text text-transparent'>
+                <div className='max-w-screen-2xl w-full h-full flex items-center justify-center px-4 py-8 bg-gradient-to-br from-slate-50 to-blue-50 dark:from-gray-900 dark:via-gray-950 dark:to-black'>
+                    <div className='bg-white dark:bg-gradient-to-b dark:from-[#1e1e1e] dark:to-[#121212] text-slate-900 dark:text-white w-full max-w-md rounded-3xl p-6 sm:p-8 shadow-2xl border border-slate-200 dark:border-gray-600'>
+                        <h1 className='text-2xl sm:text-3xl font-bold text-center mb-6 bg-gradient-to-r from-blue-600 to-purple-600 dark:from-[#7a6ff0] dark:to-[#5e8bff] bg-clip-text text-transparent'>
                             Create New Admin
                         </h1>
 
                         {inputFields.map(({ label, name, type }) => (
                             <div className='mb-4' key={name}>
-                                <label className='block text-sm font-medium text-gray-300 mb-2'>
+                                <label className='block text-sm font-medium text-slate-700 dark:text-gray-300 mb-2'>
                                     {label}
                                 </label>
                                 <input
@@ -98,14 +98,14 @@ const AddNewAdmin = () => {
                                     onChange={handlechange}
                                     type={type}
                                     placeholder={`Enter your ${label.toLowerCase()}`}
-                                    className="w-full h-12 px-4 rounded-xl bg-gray-800 border border-gray-700 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                    className="w-full h-12 px-4 rounded-xl bg-slate-50 dark:bg-gray-800 border border-slate-300 dark:border-gray-700 text-slate-900 dark:text-white placeholder-slate-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-500"
                                 />
                             </div>
                         ))}
 
                         {/* Password */}
                         <div className='mb-4'>
-                            <label className='block text-sm font-medium text-gray-300 mb-2'>
+                            <label className='block text-sm font-medium text-slate-700 dark:text-gray-300 mb-2'>
                                 Password
                             </label>
                             <div className="relative">
@@ -115,11 +115,11 @@ const AddNewAdmin = () => {
                                     onChange={handlechange}
                                     type={showpass ? "text" : "password"}
                                     placeholder="Enter your password"
-                                    className="w-full h-12 px-4 pr-12 rounded-xl bg-gray-800 border border-gray-700 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                    className="w-full h-12 px-4 pr-12 rounded-xl bg-slate-50 dark:bg-gray-800 border border-slate-300 dark:border-gray-700 text-slate-900 dark:text-white placeholder-slate-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-500"
                                 />
                                 <button
                                     type="button"
-                                    className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400"
+                                    className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 dark:text-gray-400"
                                     onClick={() => setshowpass(!showpass)}
                                 >
                                     {showpass ? <EyeOff size={20} /> : <Eye size={20} />}
@@ -129,7 +129,7 @@ const AddNewAdmin = () => {
 
                         {/* Confirm Password */}
                         <div className='mb-6'>
-                            <label className='block text-sm font-medium text-gray-300 mb-2'>
+                            <label className='block text-sm font-medium text-slate-700 dark:text-gray-300 mb-2'>
                                 Confirm Password
                             </label>
                             <div className="relative">
@@ -139,17 +139,17 @@ const AddNewAdmin = () => {
                                     onChange={handlechange}
                                     type={showpass ? "text" : "password"}
                                     placeholder="Confirm your password"
-                                    className="w-full h-12 px-4 pr-12 rounded-xl bg-gray-800 border border-gray-700 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                    className="w-full h-12 px-4 pr-12 rounded-xl bg-slate-50 dark:bg-gray-800 border border-slate-300 dark:border-gray-700 text-slate-900 dark:text-white placeholder-slate-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-500"
                                 />
                                 <button
                                     type="button"
-                                    className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400"
+                                    className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 dark:text-gray-400"
                                     onClick={() => setshowpass(!showpass)}
                                 >
                                     {showpass ? <EyeOff size={20} /> : <Eye size={20} />}
                                 </button>
                             </div>
-                            {error && <span className='text-red-400 text-sm mt-2 block'>{error}</span>}
+                            {error && <span className='text-red-500 dark:text-red-400 text-sm mt-2 block'>{error}</span>}
                         </div>
 
                         {/* Signup Button */}
@@ -157,18 +157,18 @@ const AddNewAdmin = () => {
                             <button
                                 type="submit"
                                 disabled={loading}
-                                className="w-full h-12 rounded-xl bg-gradient-to-r from-[#7a6ff0] to-[#5e8bff] text-white font-semibold shadow-lg hover:scale-105 disabled:opacity-60"
+                                className="w-full h-12 rounded-xl bg-gradient-to-r from-blue-600 to-purple-600 dark:from-[#7a6ff0] dark:to-[#5e8bff] text-white font-semibold shadow-lg hover:scale-105 disabled:opacity-60"
                             >
                                 {loading ? "Creating Admin..." : "Create Admin"}
                             </button>
                         </div>
 
                         {/* Already have account */}
-                        <div className='text-center text-sm text-gray-400'>
+                        <div className='text-center text-sm text-slate-600 dark:text-gray-400'>
                             Already have an account?{' '}
                             <Link
                                 to="/login"
-                                className='text-[#7a6ff0] hover:underline font-medium'
+                                className='text-blue-600 dark:text-[#7a6ff0] hover:underline font-medium'
                             >
                                 Log in
                             </Link>

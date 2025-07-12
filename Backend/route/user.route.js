@@ -3,11 +3,12 @@ import {
   addNewAdmin,
   addNewDoctor,
   getAllDoctors,
+  getAllAdmins,
   getUserDetails,
   login,
   logoutAdmin,
   logoutPatient,
-
+  deleteDoctor,
   signup,
 } from "../controller/User.controller.js";
 import {
@@ -22,6 +23,8 @@ router.post("/login", login);
 router.post("/addadmin", isAdminAuthenticated, addNewAdmin);
 router.post("/adddoctor",isAdminAuthenticated, addNewDoctor);
 router.get("/alldoctors", getAllDoctors);
+router.get("/alladmins", isAdminAuthenticated, getAllAdmins);
+router.delete("/doctor/:id", isAdminAuthenticated, deleteDoctor);
 router.get("/patient/me", isPatientAuthenticated, getUserDetails);
 router.get("/admin/me", isAdminAuthenticated, getUserDetails);
 router.get("/doctor/me", isPatientAuthenticated, getUserDetails);

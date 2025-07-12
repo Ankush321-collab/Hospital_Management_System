@@ -32,6 +32,11 @@ const messageSchema=new mongoose.Schema({
         minlength:[10,"message must contain 10 character atleast"]
     },
 
+    isRead: {
+        type: Boolean,
+        default: false
+    },
+
 },{
     timestamps:true,
 

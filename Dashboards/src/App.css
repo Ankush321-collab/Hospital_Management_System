@@ -1,0 +1,10 @@
+@import "tailwindcss/preflight";
+@tailwind utilities;
+
+body {
+  @apply bg-slate-50 dark:bg-gray-900 dark:text-gray-100 transition-colors duration-300;
+}
+
+html {
+  @apply dark:bg-gray-900;
+} 

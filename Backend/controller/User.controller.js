@@ -3,6 +3,7 @@ import { User } from "../model/UserSchema.js";
 import ErrorHandler from "../middleware/error.js";
 import { generateToken } from "../../Backend/utils/jwtToken.js";
 import cloudinary from "cloudinary";
+import { Activity } from '../model/activity.schema.js';
 
 // Cloudinary configuration using environment variables
 cloudinary.v2.config({
@@ -179,6 +180,12 @@ export const addNewDoctor = catchAsyncErrors(async (req, res, next) => {
       url: cloudinaryResponse.url,
     },
   });
+  // Log activity
+  await Activity.create({
+    type: 'doctor_added',
+    description: `New doctor registration: Dr. ${doctor.firstName} ${doctor.lastName}`,
+    meta: { doctorId: doctor._id, department: doctor.doctorDepartment }
+  });
   res.status(200).json({
     success: true,
     message: "New Doctor Registered",
@@ -192,6 +199,14 @@ export const getAllDoctors = catchAsyncErrors(async (req, res, next) => {
   res.status(200).json({
     success: true,
     doctors,
+  });
+});
+
+export const getAllAdmins = catchAsyncErrors(async (req, res, next) => {
+  const admins = await User.find({ role: "Admin" });
+  res.status(200).json({
+    success: true,
+    admins,
   });
 });
 
@@ -229,4 +244,36 @@ export const logoutPatient = catchAsyncErrors(async (req, res, next) => {
       success: true,
       message: "Patient Logged Out Successfully.",
     });
+});
+
+// Delete doctor function
+export const deleteDoctor = catchAsyncErrors(async (req, res, next) => {
+  const { id } = req.params;
+  
+  const doctor = await User.findById(id);
+  if (!doctor) {
+    return next(new ErrorHandler("Doctor not found!", 404));
+  }
+  
+  if (doctor.role !== "Doctor") {
+    return next(new ErrorHandler("User is not a doctor!", 400));
+  }
+  
+  // Delete avatar from cloudinary if exists
+  if (doctor.docAvatar && doctor.docAvatar.public_id) {
+    await cloudinary.v2.uploader.destroy(doctor.docAvatar.public_id);
+  }
+  
+  await User.findByIdAndDelete(id);
+  // Log activity
+  await Activity.create({
+    type: 'doctor_deleted',
+    description: `Doctor resigned: Dr. ${doctor.firstName} ${doctor.lastName}`,
+    meta: { doctorId: doctor._id, department: doctor.doctorDepartment }
+  });
+  
+  res.status(200).json({
+    success: true,
+    message: "Doctor deleted successfully!",
+  });
 });

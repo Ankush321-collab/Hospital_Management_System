@@ -8,6 +8,7 @@ import { errorMiddleware } from "./middleware/error.js";
 import messageRouter from "./route/message.route.js";
 import userRouter from "./route/user.route.js";
 import appointrouter from './route/appointment.route.js'
+import activityRouter from './route/activity.route.js';
 
 const app = express();
 config({ path: "./.env" }); // Updated to match .env file
@@ -41,6 +42,9 @@ app.use("/api", userRouter);
 
 //router for appointment_date
 app.use('/api', appointrouter)
+
+//router for activity
+app.use("/api/v1/activity", activityRouter);
 
 dbConnection();
 

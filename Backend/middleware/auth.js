@@ -6,38 +6,76 @@ import jwt from "jsonwebtoken";
 // Middleware to authenticate dashboard users
 export const isAdminAuthenticated = catchAsyncErrors(
   async (req, res, next) => {
-    const token = req.cookies.adminToken;
+    let token = req.cookies.adminToken;
+    
+    // If no cookie token, try Authorization header
+    if (!token) {
+      const authHeader = req.headers.authorization;
+      if (authHeader && authHeader.startsWith('Bearer ')) {
+        token = authHeader.substring(7);
+      }
+    }
+    
     if (!token) {
       return next(
-        new ErrorHandler("Dashboard User is not authenticated!", 400)
+        new ErrorHandler("Dashboard User is not authenticated!", 401)
       );
     }
-    const decoded = jwt.verify(token, process.env.JWT_SECRET_KEY);
-    req.user = await User.findById(decoded.id);
-    if (req.user.role !== "Admin") {
-      return next(
-        new ErrorHandler(`${req.user.role} not authorized for this resource!`, 403)
-      );
+    
+    try {
+      const decoded = jwt.verify(token, process.env.JWT_SECRET_KEY);
+      req.user = await User.findById(decoded.id);
+      
+      if (!req.user) {
+        return next(new ErrorHandler("User not found!", 404));
+      }
+      
+      if (req.user.role !== "Admin") {
+        return next(
+          new ErrorHandler(`${req.user.role} not authorized for this resource!`, 403)
+        );
+      }
+      next();
+    } catch (error) {
+      return next(new ErrorHandler("Invalid token!", 401));
     }
-    next();
   }
 );
 
 // Middleware to authenticate frontend users
 export const isPatientAuthenticated = catchAsyncErrors(
   async (req, res, next) => {
-    const token = req.cookies.patientToken;
+    let token = req.cookies.patientToken;
+    
+    // If no cookie token, try Authorization header
     if (!token) {
-      return next(new ErrorHandler("User is not authenticated!", 400));
+      const authHeader = req.headers.authorization;
+      if (authHeader && authHeader.startsWith('Bearer ')) {
+        token = authHeader.substring(7);
+      }
     }
-    const decoded = jwt.verify(token, process.env.JWT_SECRET_KEY);
-    req.user = await User.findById(decoded.id);
-    if (req.user.role !== "Patient") {
-      return next(
-        new ErrorHandler(`${req.user.role} not authorized for this resource!`, 403)
-      );
+    
+    if (!token) {
+      return next(new ErrorHandler("User is not authenticated!", 401));
     }
-    next();
+    
+    try {
+      const decoded = jwt.verify(token, process.env.JWT_SECRET_KEY);
+      req.user = await User.findById(decoded.id);
+      
+      if (!req.user) {
+        return next(new ErrorHandler("User not found!", 404));
+      }
+      
+      if (req.user.role !== "Patient") {
+        return next(
+          new ErrorHandler(`${req.user.role} not authorized for this resource!`, 403)
+        );
+      }
+      next();
+    } catch (error) {
+      return next(new ErrorHandler("Invalid token!", 401));
+    }
   }
 );
 
